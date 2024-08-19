@@ -46,7 +46,7 @@ export class TabComponent {
         [ngClass]="{ 'tab-active': $index === selectedTab() }"
         (click)="onSelectTab($index)"
       >
-        <ng-container *ngTemplateOutlet="tab.header"></ng-container>
+        <ng-container *ngTemplateOutlet="tab.header()"></ng-container>
       </a>
       }
     </div>
@@ -60,8 +60,8 @@ export class TabsComponent {
   tabsData = computed(() => {
     return this.tabs().map(({ content, header }) => {
       return {
-        header: header() as TemplateRef<unknown>,
-        content: content() as TemplateRef<unknown>,
+        header,
+        content
       };
     });
   });
@@ -69,7 +69,7 @@ export class TabsComponent {
   selectedTab = signal(0);
 
   selectedTabContent = computed(
-    () => this.tabsData()[this.selectedTab()].content
+    () => this.tabsData()[this.selectedTab()].content()
   );
 
   onSelectTab(index: number) {
@@ -99,7 +99,7 @@ export class TabsModule {}
   selector: 'app-root',
   template: `
     <div class="flex justify-center">
-      <div class="w-full max-w-xs">
+      <div class="w-full max-w-md">
         <app-tabs>
           <app-tab>
             <ng-template appTabHeader>
@@ -118,6 +118,16 @@ export class TabsModule {}
 
             <ng-template appTabContent>
               <h1>Conteúdo da Tab 2</h1>
+            </ng-template>
+          </app-tab>
+
+          <app-tab>
+            <ng-template appTabHeader>
+              <h1>Minha Tab 3</h1>
+            </ng-template>
+
+            <ng-template appTabContent>
+              <h1>Conteúdo da Tab 3</h1>
             </ng-template>
           </app-tab>
         </app-tabs>
